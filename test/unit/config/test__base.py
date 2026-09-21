@@ -288,11 +288,11 @@ def test_container_volume_mounting_with_Z(tmp_path, mocker):
 ))
 def test_container_auth_data_verify_ssl_false_adds_podman_tls_verify(tmp_path, mocker, verify_ssl, expect_tls_verify_flag):
     # regression test: registries.conf is ignored by a remote podman service (e.g. over CONTAINER_HOST), so --tls-verify must be passed explicitly too.
+    mocker.patch('os.path.isdir', mocker.Mock())
     mocker.patch('os.path.exists', return_value=True)
     mocker.patch('os.makedirs', return_value=True)
 
     rc = BaseConfig(private_data_dir=str(tmp_path))
-    os.path.isdir = mocker.Mock()
     rc.container_name = 'foo'
     rc.runner_mode = 'pexpect'
     rc.env = {}
@@ -309,11 +309,11 @@ def test_container_auth_data_verify_ssl_false_adds_podman_tls_verify(tmp_path, m
 
 
 def test_container_auth_data_docker_never_gets_tls_verify_flag(tmp_path, mocker):
+    mocker.patch('os.path.isdir', mocker.Mock())
     mocker.patch('os.path.exists', return_value=True)
     mocker.patch('os.makedirs', return_value=True)
 
     rc = BaseConfig(private_data_dir=str(tmp_path))
-    os.path.isdir = mocker.Mock()
     rc.container_name = 'foo'
     rc.runner_mode = 'pexpect'
     rc.env = {}
